@@ -1,0 +1,11 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- A 'parent' preference, which enables/disables child preferences (below)
+         when checked/unchecked. -->
+    <EditTextPreference
+        android:key="@string/pref_code_hd1"
+        android:title="@string/pref_title_code_hd1"
+        android:defaultValue="@string/pref_default_code_hd1" />
+
+
+</PreferenceScreen>
