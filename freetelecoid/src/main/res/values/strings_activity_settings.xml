@@ -1,7 +1,7 @@
 <resources>
-    <string name="title_activity_settings">Paramètres de connection au boitier HD</string>
+    <string name="title_activity_settings">HD Boxes connexion settings</string>
     <string name="pref_header_general">General</string>
-    <string name="pref_code_hd1">code_hd1</string>
-    <string name="pref_default_code_hd1">41322886</string>
+    <string name="pref_code_hd1" translatable="false">code_hd1</string>
+    <string name="pref_default_code_hd1" translatable="false">0</string>
     <string name="pref_title_code_hd1">Code boitier HD n°1</string>
 </resources>

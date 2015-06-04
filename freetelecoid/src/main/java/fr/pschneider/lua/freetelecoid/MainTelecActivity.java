@@ -121,11 +121,11 @@ public class MainTelecActivity extends ActionBarActivity {
             Locale l = Locale.getDefault();
             switch (position) {
                 case 0:
-                    return getString(R.string.title_section1).toUpperCase(l);
+                    return getString(R.string.FreeTelecoidHd1).toUpperCase(l);
                 case 1:
-                    return getString(R.string.title_section2).toUpperCase(l);
+                    return getString(R.string.FreeTelecoidHd2).toUpperCase(l);
                 case 2:
-                    return getString(R.string.title_section3).toUpperCase(l);
+                    return getString(R.string.FreeTelecoidFavorites).toUpperCase(l);
             }
             return null;
         }
@@ -221,22 +221,23 @@ public class MainTelecActivity extends ActionBarActivity {
                         new View.OnLongClickListener() {
                             @Override
                             public boolean onLongClick(View v) {
-                                v.startAnimation(lgClickAnim);
+                          //      v.startAnimation(lgClickAnim);
                                 KeyHitParams prms = new KeyHitParams();
                                 prms.key = keyMap.get(v.getId());
                                 prms.longclick = true;
-                                new HDClickTask().execute(prms);
-                                return false;
+                                final AsyncTask<KeyHitParams, Integer, Integer> exe = new HDClickTask().execute(prms);
+                                return exe.getStatus() == AsyncTask.Status.RUNNING ;
                             }
                         } );
                 v.setOnClickListener(
                         new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                v.startAnimation( shClickAnim );
+                       //         v.startAnimation( shClickAnim );
                                 KeyHitParams prms = new KeyHitParams();
                                 prms.key = keyMap.get(v.getId());
-                                new HDClickTask().execute(prms);
+                                final AsyncTask<KeyHitParams, Integer, Integer> exe = new HDClickTask().execute(prms);
+                                return ;
                             }
                         }
                 );

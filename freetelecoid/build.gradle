@@ -10,11 +10,22 @@ android {
         versionCode 1
         versionName "1.0"
     }
+
+    signingConfigs {
+        release {
+            storeFile file("/home/paul/keystore.jks")
+            storePassword "mmvelkzevz"
+            keyAlias "androstuddevkey"
+            keyPassword "mmvelkzevz"
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
+            signingConfig signingConfigs.release
+	}
     }
     productFlavors {
     }
