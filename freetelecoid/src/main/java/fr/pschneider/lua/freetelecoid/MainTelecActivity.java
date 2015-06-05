@@ -18,8 +18,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.Toast;
 
 import java.io.BufferedInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -31,7 +33,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 
 public class MainTelecActivity extends ActionBarActivity {
 
@@ -61,11 +62,7 @@ public class MainTelecActivity extends ActionBarActivity {
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(mSectionsPagerAdapter);
-
-
     }
-
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -91,46 +88,6 @@ public class MainTelecActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-
-    /**
-     * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
-     * one of the sections/tabs/pages.
-     */
-    public class SectionsPagerAdapter extends FragmentPagerAdapter {
-
-
-        public SectionsPagerAdapter(FragmentManager fm) {
-            super(fm);
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            // getItem is called to instantiate the fragment for the given page.
-            // Return a PlaceholderFragment (defined as a static inner class below).
-            return PlaceholderFragment.newInstance(position + 1);
-        }
-
-        @Override
-        public int getCount() {
-            // Show 3 total pages.
-            return 1;
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            Locale l = Locale.getDefault();
-            switch (position) {
-                case 0:
-                    return getString(R.string.FreeTelecoidHd1).toUpperCase(l);
-                case 1:
-                    return getString(R.string.FreeTelecoidHd2).toUpperCase(l);
-                case 2:
-                    return getString(R.string.FreeTelecoidFavorites).toUpperCase(l);
-            }
-            return null;
-        }
-    }
-
     /**
      * A placeholder fragment containing a simple view.
      */
@@ -140,6 +97,12 @@ public class MainTelecActivity extends ActionBarActivity {
          * fragment.
          */
         private static final String ARG_SECTION_NUMBER = "section_number";
+        public static String code_hd1 = null;
+        Map<Integer, String> keyMap = new HashMap<>();
+        Animation lgClickAnim;
+        Animation shClickAnim;
+        public PlaceholderFragment() {
+        }
 
         /**
          * Returns a new instance of this fragment for the given section
@@ -152,14 +115,6 @@ public class MainTelecActivity extends ActionBarActivity {
             fragment.setArguments(args);
             return fragment;
         }
-
-        public PlaceholderFragment() {
-        }
-
-        Map<Integer, String> keyMap = new HashMap<>();
-
-        Animation lgClickAnim;
-        Animation shClickAnim;
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -221,55 +176,88 @@ public class MainTelecActivity extends ActionBarActivity {
                         new View.OnLongClickListener() {
                             @Override
                             public boolean onLongClick(View v) {
-                          //      v.startAnimation(lgClickAnim);
+                                //      v.startAnimation(lgClickAnim);
                                 KeyHitParams prms = new KeyHitParams();
                                 prms.key = keyMap.get(v.getId());
                                 prms.longclick = true;
-                                final AsyncTask<KeyHitParams, Integer, Integer> exe = new HDClickTask().execute(prms);
-                                return exe.getStatus() == AsyncTask.Status.RUNNING ;
+                                new HDClickTask() {
+                                    @Override
+                                    public void onError(int index, final String message) {
+                                        getActivity().runOnUiThread(new Runnable() {
+                                            public void run() {
+                                                Toast.makeText(getActivity().getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+                                            }
+                                        });
+                                    }}.execute(prms);
+
+                                return false;
                             }
-                        } );
-                v.setOnClickListener(
-                        new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                       //         v.startAnimation( shClickAnim );
-                                KeyHitParams prms = new KeyHitParams();
-                                prms.key = keyMap.get(v.getId());
-                                final AsyncTask<KeyHitParams, Integer, Integer> exe = new HDClickTask().execute(prms);
-                                return ;
-                            }
+                        });
+
+
+                        v.setOnClickListener(
+                                new View.OnClickListener()
+                                {
+                                    @Override
+                                    public void onClick(View v) {
+                                            //         v.startAnimation( shClickAnim );
+                                            KeyHitParams prms = new KeyHitParams();
+                                            prms.key = keyMap.get(v.getId());
+
+                                        new HDClickTask() {
+                                            @Override
+                                            public void onError(int index, final String message) {
+                                                getActivity().runOnUiThread(new Runnable() {
+                                                    public void run() {
+                                                        Toast.makeText(getActivity().getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+                                                    }
+                                                });
+                                            }
+                                        }.execute(prms);
+                                    }
+                                });
                         }
-                );
-            }
-            return rootView;
+                return rootView;
         }
-        public static String code_hd1 = null;
+
+        private void readStream(InputStream in) {
+
+        }
+
         private class KeyHitParams {
             public String key;
             public Boolean longclick=false;
             public Integer repeat=1;
         }
-        private class HDClickTask extends AsyncTask<KeyHitParams,Integer,Integer> {
+
+        private abstract class HDClickTask extends AsyncTask<KeyHitParams,Integer,Integer> {
+
+            public abstract void onError(int index, String message);
 
             @Override
             protected Integer doInBackground(KeyHitParams... params) {
                 int count = params.length;
+                int pi = 0;
                 for (KeyHitParams param : params) {
-
-                    String stringUrl = String.format("http://hd1.freebox.fr/pub/remote_control?code=%s&key=%s&long=%s&repeat=%d",
+                    String stringUrl = String.format(getString(R.string.uri_hd1),
                             code_hd1, param.key, param.longclick ? "true" : "false", param.repeat);
-
                     try {
                         URL url = new URL(stringUrl);
-
                         HttpURLConnection cx = (HttpURLConnection) url.openConnection();
-
+                        cx.setConnectTimeout(2500);
                         try {
                             InputStream in = new BufferedInputStream(cx.getInputStream());
                             readStream(in);
-                        } finally {
+                        }
+                        catch (FileNotFoundException fex)   {
+                            onError(pi, getString(R.string.e_code_hd));
+                        }
+                        catch (Exception ex) {
+                            onError(pi, ex.getMessage());
+                        }
+                        finally {
                             cx.disconnect();
+                            pi++;
                         }
 
                     } catch (MalformedURLException uex) {
@@ -282,9 +270,44 @@ public class MainTelecActivity extends ActionBarActivity {
                 return count;
             }
         }
+    }
 
-        private void readStream(InputStream in) {
+    /**
+     * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
+     * one of the sections/tabs/pages.
+     */
+    public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
+
+        public SectionsPagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            // getItem is called to instantiate the fragment for the given page.
+            // Return a PlaceholderFragment (defined as a static inner class below).
+            return PlaceholderFragment.newInstance(position + 1);
+        }
+
+        @Override
+        public int getCount() {
+            // Show 3 total pages.
+            return 1;
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            Locale l = Locale.getDefault();
+            switch (position) {
+                case 0:
+                    return getString(R.string.FreeTelecoidHd1).toUpperCase(l);
+                case 1:
+                    return getString(R.string.FreeTelecoidHd2).toUpperCase(l);
+                case 2:
+                    return getString(R.string.FreeTelecoidFavorites).toUpperCase(l);
+            }
+            return null;
         }
     }
 

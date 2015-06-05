@@ -7,10 +7,10 @@
     <string name="pref_title_code_hd1">Code boitier HD n°1</string>
     <string name="pref_header_general">Général</string>
     <string name="FreeTelecoidHd2">Télecommande HD2</string>
-    <string name="FreeTelecoidFavorites">Favori
-        s</string>
+    <string name="FreeTelecoidFavorites">Favoris</string>
     <string name="mute">Muet</string>
     <string name="bwd">Arrière</string>
     <string name="fwd">Avant</string>
     <string name="sortie">Sortie</string>
+    <string name="e_code_hd">Code HD incorrect</string>
 </resources>
