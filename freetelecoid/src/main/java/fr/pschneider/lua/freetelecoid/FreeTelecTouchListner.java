@@ -31,7 +31,7 @@ public class FreeTelecTouchListner implements View.OnTouchListener {
         telecActivity = a;
     }
 
-    private final long longClickTimeout = 500;
+    private final long longClickTimeout = 1000;
     private final long delayBetweenLongAndRepeat = 1000;
     private final long autoRepeatDelay = 200;
 
@@ -44,6 +44,7 @@ public class FreeTelecTouchListner implements View.OnTouchListener {
             view = v;
         }
     }
+    AsyncTask<LongTouchArgs,Void,Void> hitTask=null;
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
@@ -54,7 +55,7 @@ public class FreeTelecTouchListner implements View.OnTouchListener {
             prms.key = MainTelecActivity.PlaceholderFragment.keyMap.get(v.getId());
             prms.repeat = 1;
             if (action == MotionEvent.ACTION_DOWN) {
-                new AsyncTask<LongTouchArgs,Void,Void>() {
+                hitTask = new AsyncTask<LongTouchArgs,Void,Void>() {
                     @Override
                     protected Void doInBackground(LongTouchArgs... params) {
                         sleep(longClickTimeout);
@@ -63,17 +64,27 @@ public class FreeTelecTouchListner implements View.OnTouchListener {
                             telecActivity.ExecuteClick(params[0].params);
                             sleep(delayBetweenLongAndRepeat);
                             while (params[0].view.isPressed()) {
+                                // repeating
                                 sleep(autoRepeatDelay);
                                 params[0].params.longclick = false;
-                                params[0].params.repeat = 1;
+                                params[0].params.repeat = 3;
                                 telecActivity.ExecuteClick(params[0].params);
                             }
                         }
                         return null;
                     }
-                }.execute(new LongTouchArgs(v,prms));
-            }
+
+                    @Override
+                    protected void onPostExecute(Void aVoid) {
+                        super.onPostExecute(aVoid);
+                        hitTask = null;
+                    }
+                };
+                hitTask.execute(new LongTouchArgs(v, prms));
+            } else
             if (action == MotionEvent.ACTION_UP) {
+                if (hitTask!=null)
+                    hitTask.cancel(true);
                 telecActivity.ExecuteClick(prms);
             }
         }
