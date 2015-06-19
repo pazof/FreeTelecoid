@@ -1,4 +1,5 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainTelecActivity$PlaceholderFragment"
@@ -9,303 +10,330 @@
         android:layout_height="fill_parent"
         android:id="@+id/scrollView"
         android:gravity="center"
-        android:background="@android:color/background_dark">
+        android:background="@android:color/background_dark"
+        android:layout_gravity="center_horizontal"
+        android:layoutMode="clipBounds"
+        android:longClickable="false"
+        android:measureAllChildren="false">
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <android.support.v7.widget.GridLayout
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="vertical"
-            >
-
-
-            <LinearLayout
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content" android:orientation="horizontal"
-                android:gravity="center">
-                <Button
-                    android:id="@+id/fbt_tv"
-                    android:text="@string/tv"
-                    style="@style/AppThemeButton" />
-                <Button
-                    android:id="@+id/fbt_power"
-                    android:text="@string/power"
-                    android:hint="On/Off"
-                    style="@style/AppThemeButton" />
-
-                </LinearLayout>
-
-
-            <LinearLayout
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content" android:orientation="horizontal"
-                android:gravity="center">
-
+            android:layout_gravity="center_horizontal|fill_horizontal"
+            app:useDefaultMargins="true"
+            app:alignmentMode="alignBounds"
+            app:columnCount="3"
+            app:rowCount="17"
+            app:columnOrderPreserved="true"
+            app:orientation="vertical"
+            app:rowOrderPreserved="true"
+            android:layoutMode="clipBounds"
+            android:nestedScrollingEnabled="false"
+            android:textAlignment="center">
+            <!-- row 1 -->
+            <Button
+                android:id="@+id/fbt_tv"
+                android:text="@string/tv"
+                style="@style/AppThemeButton"
+                app:layout_row="0"
+                app:layout_column="0"/>
+            <Button
+                android:id="@+id/fbt_power"
+                android:text="@string/power"
+                android:hint="On/Off"
+                style="@style/AppThemeButton"
+                app:layout_row="0"
+                app:layout_column="2"/>
+            <!-- row 2 -->
             <Button
                 android:id="@+id/fbt_1"
                 android:text="1"
-                style="@style/AppThemeButton" />
-
+                style="@style/AppThemeButton"
+                app:layout_row="1"
+                app:layout_column="0" />
             <Button
                 android:id="@+id/fbt_2"
                 android:text="2"
-                style="@style/AppThemeButton" />
-
+                style="@style/AppThemeButton"
+                app:layout_row="1"
+                app:layout_column="1" />
             <Button
                 android:id="@+id/fbt_3"
                 android:text="3"
-                style="@style/AppThemeButton" />
+                style="@style/AppThemeButton"
+                app:layout_row="1"
+                app:layout_column="2" />
 
-
-        </LinearLayout>
-            <LinearLayout
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content" android:orientation="horizontal"
-                android:gravity="center">
+            <!-- row 3 -->
             <Button
                 android:id="@+id/fbt_4"
                 android:text="4"
-                style="@style/AppThemeButton" />
+                style="@style/AppThemeButton"
+                app:layout_row="2"
+                app:layout_column="0"
+                />
 
             <Button
                 android:id="@+id/fbt_5"
                 android:text="5"
-                style="@style/AppThemeButton" />
+                style="@style/AppThemeButton"
+                app:layout_row="2"
+                app:layout_column="1"
+                />
 
             <Button
                 android:id="@+id/fbt_6"
                 android:text="6"
-                style="@style/AppThemeButton" />
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" android:orientation="horizontal"
-            android:gravity="center|center_horizontal">
+                style="@style/AppThemeButton"
+                app:layout_row="2"
+                app:layout_column="2"
+                />
+
+            <!-- row 4 -->
+
             <Button
                 android:id="@+id/fbt_7"
                 android:text="7"
-                style="@style/AppThemeButton" />
+                style="@style/AppThemeButton"
+                app:layout_row="3"
+                app:layout_column="0"
+                />
 
             <Button
                 android:id="@+id/fbt_8"
                 android:text="8"
-                style="@style/AppThemeButton" />
+                style="@style/AppThemeButton"
+                app:layout_row="3"
+                app:layout_column="1"
+                />
 
             <Button
                 android:id="@+id/fbt_9"
                 android:text="9"
-                style="@style/AppThemeButton" />
+                style="@style/AppThemeButton"
+                app:layout_row="3"
+                app:layout_column="2"
+                />
 
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" android:orientation="horizontal"
-            android:gravity="center|center_horizontal">
+            <!-- row 5 -->
             <Button
                 android:id="@+id/fbt_0"
                 android:text="0"
-                style="@style/AppThemeButton" />
-        </LinearLayout>
+                style="@style/AppThemeButton"
+                app:layout_row="4"
+                app:layout_column="1"
+
+                />
+
+            <!-- row 6 -->
+
             <ImageButton
                 android:id="@+id/fbt_home"
                 android:src="@drawable/home"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
                 style="@style/AppThemeButton"
-                android:maxHeight="100dp"
-                android:longClickable="false" />
+                app:layout_row="5"
+                app:layout_column="0"
+                app:layout_columnSpan="3"
+                android:textAlignment="center" />
 
-             <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" android:orientation="horizontal"
-            android:gravity="center|center_horizontal">
 
+            <!-- row 7 -->
             <Button
                 android:id="@+id/fbt_red"
                 android:text="@string/sortie"
                 android:background="@drawable/button_red"
-                style="@style/AppThemeButton" />
+                style="@style/AppThemeButton"
+                app:layout_row="6"
+                app:layout_column="0"/>
             <ImageButton
                 android:id="@+id/fbt_up"
                 android:src="@drawable/up"
-                style="@style/AppThemeButton" />
+                style="@style/AppThemeButton"
+                app:layout_row="6"
+                app:layout_column="1"/>
             <Button
                 android:id="@+id/fbt_blue"
                 android:text="Loupe"
                 android:background="@drawable/button_blue"
-                style="@style/AppThemeButton" />
+                style="@style/AppThemeButton"
+                app:layout_row="6"
+                app:layout_column="2"
+                android:textAlignment="center"
+                android:gravity="center" />
 
-            </LinearLayout>
+            <!-- row 8 -->
+            <ImageButton
+                android:src="@drawable/left"
+                android:id="@+id/fbt_left"
+                style="@style/AppThemeButton"
+                app:layout_row="7"
+                app:layout_column="0" />
+            <Button
+                android:id="@+id/fbt_ok"
+                android:text="Ok"
+                style="@style/AppThemeButton"
+                app:layout_row="7"
+                app:layout_column="1"/>
+            <ImageButton
+                android:src="@drawable/right"
+                android:id="@+id/fbt_right"
+                style="@style/AppThemeButton"
+                app:layout_row="7"
+                app:layout_column="2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="right" />
+            <!-- row 9 -->
+            <Button
+                android:id="@+id/fbt_green"
+                android:text="Menu"
+                android:background="@drawable/button_green"
+                style="@style/AppThemeButton"
+                app:layout_row="8"
+                app:layout_column="0"/>
 
-            <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" android:orientation="horizontal"
-            android:gravity="center|center_horizontal">
-                <ImageButton
-                    android:src="@drawable/left"
-                    android:id="@+id/fbt_left"
-                    style="@style/AppThemeButton" />
-                <Button
-                    android:id="@+id/fbt_ok"
-                    android:text="Ok"
-                    style="@style/AppThemeButton" />
-                <ImageButton
-                    android:src="@drawable/right"
-                    android:id="@+id/fbt_right"
-                    style="@style/AppThemeButton" />
+            <ImageButton
+                android:src="@drawable/down"
+                android:id="@+id/fbt_down"
+                style="@style/AppThemeButton"
+                app:layout_row="8"
+                app:layout_column="1" />
+            <Button
+                android:id="@+id/fbt_yellow"
+                android:text="Info"
+                android:background="@drawable/button_yellow"
+                style="@style/AppThemeButton"
+                app:layout_row="8"
+                app:layout_column="2" />
 
-            </LinearLayout>
+            <!-- rows 10 11 12 -->
+            <ImageButton
+                android:id="@+id/fbt_vol_inc"
+                android:src="@drawable/plus"
+                android:text="Vol +"
+                style="@style/AppThemeButton"
+                app:layout_row="9"
+                app:layout_column="0"
+                />
 
-            <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" android:orientation="horizontal"
-            android:gravity="center|center_horizontal">
+            <ImageButton
+                android:id="@+id/fbt_prgm_inc"
+                android:src="@drawable/plus"
+                style="@style/AppThemeButton"
+                android:text="Prog +"
+                app:layout_row="9"
+                app:layout_column="2" />
 
-                <Button
-                    android:id="@+id/fbt_green"
-                    android:text="Menu"
-                    android:background="@drawable/button_green"
-                    style="@style/AppThemeButton" />
+            <ImageButton
+                android:id="@+id/fbt_vol_dec"
+                android:src="@drawable/moins"
+                style="@style/AppThemeButton"
+                android:text="Vol -"
+                app:layout_row="11"
+                app:layout_column="0" />
 
-                <ImageButton
-                    android:src="@drawable/down"
-                    android:id="@+id/fbt_down"
-                    style="@style/AppThemeButton" />
-                <Button
-                    android:id="@+id/fbt_yellow"
-                    android:text="Info"
-                    android:background="@drawable/button_yellow"
-                    style="@style/AppThemeButton" />
+            <ImageButton
+                android:id="@+id/fbt_prgm_dec"
+                android:src="@drawable/moins"
+                android:text="Prog -"
+                style="@style/AppThemeButton"
+                app:layout_row="11"
+                app:layout_column="2" />
 
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" android:orientation="horizontal"
-                android:gravity="center|center_horizontal">
-                <ImageButton
-                    android:id="@+id/fbt_vol_inc"
-                    android:src="@drawable/plus"
-                    style="@style/AppThemeButton"
-                    />
-                <ImageButton
-                    android:id="@+id/fbt_vol_dec"
-                    android:src="@drawable/moins"
-                    style="@style/AppThemeButton" />
-            </LinearLayout>
-            <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" android:orientation="horizontal"
-                    android:gravity="center|center_horizontal">
-                        <ImageButton
-                            android:id="@+id/fbt_prgm_inc"
-                            android:src="@drawable/plus"
-                            style="@style/AppThemeButton" />
-                        <ImageButton
-                            android:id="@+id/fbt_prgm_dec"
-                            android:src="@drawable/moins"
-                            style="@style/AppThemeButton" />
-            </LinearLayout>
-
-
-            <LinearLayout
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content" android:orientation="horizontal"
-                android:gravity="center">
+            <!-- rows 13 -->
             <Button
                 android:id="@+id/fbt_mute"
                 android:text="@string/mute"
-                style="@style/AppThemeButton" />
+                style="@style/AppThemeButton"
+                app:layout_row="12"
+                app:layout_column="0"/>
             <ImageButton
                 android:id="@+id/fbt_rec"
                 android:src="@drawable/rec"
-                style="@style/AppThemeButton" />
-            </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content" android:orientation="horizontal"
-                    android:nestedScrollingEnabled="false"
-                    android:gravity="center">
-                <Button
+                style="@style/AppThemeButton"
+                app:layout_row="12"
+                app:layout_column="2"/>
+            <!-- rows 14 -->
+            <Button
                 android:id="@+id/fbt_bwd"
                 android:text="@string/bwd"
-                style="@style/AppThemeButton" />
-                    <Button
-                        android:id="@+id/fbt_fwd"
-                        android:text="@string/fwd"
-                        style="@style/AppThemeButton" />
-        </LinearLayout>
-            <LinearLayout
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content" android:orientation="horizontal"
-                android:nestedScrollingEnabled="false"
-                android:gravity="center">
+                style="@style/AppThemeButton"
+                app:layout_row="13"
+                app:layout_column="0" />
 
-                <ImageButton
-                    android:id="@+id/fbt_prev"
-                    android:src="@drawable/prev"
-                    style="@style/AppThemeButton" />
-                <ImageButton
-                    android:id="@+id/fbt_play"
-                    android:src="@drawable/play"
-                    style="@style/AppThemeButton" />
-                <ImageButton
-                    android:id="@+id/fbt_next"
-                    android:src="@drawable/next"
-                    style="@style/AppThemeButton" />
+            <Button
+                android:id="@+id/fbt_fwd"
+                android:text="@string/fwd"
+                style="@style/AppThemeButton"
+                app:layout_row="13"
+                app:layout_column="1" />
 
 
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content" android:orientation="horizontal"
-            android:nestedScrollingEnabled="false"
-            android:gravity="center">
+            <ImageButton
+                android:id="@+id/fbt_prev"
+                android:src="@drawable/prev"
+                style="@style/AppThemeButton"
+                app:layout_row="13"
+                app:layout_column="2"  />
+            <!-- rows 15 -->
+            <ImageButton
+                android:id="@+id/fbt_play"
+                android:src="@drawable/play"
+                style="@style/AppThemeButton"
+                app:layout_row="14"
+                app:layout_column="0"  />
 
+            <ImageButton
+                android:id="@+id/fbt_next"
+                android:src="@drawable/next"
+                style="@style/AppThemeButton"
+                app:layout_row="14"
+                app:layout_column="1" />
             <Button
                 android:id="@+id/fbt_info"
                 android:text="info"
-                style="@style/AppThemeButton" />
+                style="@style/AppThemeButton"
+                app:layout_row="14"
+                app:layout_column="2" />
+            <!-- rows 16 -->
             <Button
                 android:id="@+id/fbt_mail"
                 android:text="mail"
-                style="@style/AppThemeButton" />
-        </LinearLayout>
-            <LinearLayout
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content" android:orientation="horizontal"
-                android:nestedScrollingEnabled="false"
-                android:gravity="center">
+                style="@style/AppThemeButton"
+                app:layout_row="15"
+                app:layout_column="0" />
             <Button
                 android:id="@+id/fbt_help"
                 android:text="help"
-                style="@style/AppThemeButton" />
+                style="@style/AppThemeButton"
+                app:layout_row="15"
+                app:layout_column="1" />
             <Button
                 android:id="@+id/fbt_pip"
                 android:text="pip"
-                style="@style/AppThemeButton" />
+                style="@style/AppThemeButton"
+                app:layout_row="15"
+                app:layout_column="2" />
+            <!-- rows 17 -->
             <Button
                 android:id="@+id/fbt_epg"
                 android:text="epg"
-                style="@style/AppThemeButton" />
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content" android:orientation="horizontal"
-                android:nestedScrollingEnabled="false"
-                android:gravity="center">
+                style="@style/AppThemeButton"
+                app:layout_row="16"
+                app:layout_column="0" />
             <Button
                 android:id="@+id/fbt_media"
                 android:text="media"
-                style="@style/AppThemeButton" />
+                style="@style/AppThemeButton"
+                app:layout_row="16"
+                app:layout_column="1"/>
             <Button
                 android:id="@+id/fbt_options"
                 android:text="options"
-                style="@style/AppThemeButton" />
-
-        </LinearLayout>
-        </LinearLayout>
+                style="@style/AppThemeButton"
+                app:layout_row="16"
+                app:layout_column="2" />
+        </android.support.v7.widget.GridLayout>
 
         </ScrollView>
 

@@ -13,4 +13,5 @@
     <string name="e_code_hd">Bad HD code</string>
     <string name="uri_hd1" translatable="false">http://hd1.freebox.fr/pub/remote_control?code=%s&amp;key=%S&amp;long=%s&amp;repeat=%d</string>
     <string name="uri_hd2" translatable="false">http://hd2.freebox.fr/pub/remote_control?code=%s&amp;key=%s&amp;long=%s&amp;repeat=%d</string>
+
 </resources>
