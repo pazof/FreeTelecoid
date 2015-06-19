@@ -34,6 +34,7 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+
 public class MainTelecActivity extends ActionBarActivity {
 
     /**
@@ -87,7 +88,73 @@ public class MainTelecActivity extends ActionBarActivity {
 
         return super.onOptionsItemSelected(item);
     }
+    private abstract class HDClickTask extends AsyncTask<KeyHitParams,Integer,Integer> {
 
+        public abstract void onError(int index, String message);
+
+        @Override
+        protected Integer doInBackground(KeyHitParams... params) {
+            int count = params.length;
+            int pi = 0;
+            for (KeyHitParams param : params) {
+                String stringUrl = String.format(getString(R.string.uri_hd1),
+                        PlaceholderFragment.code_hd1, param.key, param.longclick ? "true" : "false", param.repeat);
+                try {
+                    URL url = new URL(stringUrl);
+                    HttpURLConnection cx = (HttpURLConnection) url.openConnection();
+                    cx.setConnectTimeout(500);
+                    try {
+                        InputStream in = new BufferedInputStream(cx.getInputStream());
+                        in.read();
+                        in.close();
+                    }
+                    catch (FileNotFoundException fex)   {
+                        onError(pi, getString(R.string.e_code_hd));
+                    }
+                    catch (Exception ex) {
+                        onError(pi, ex.getMessage());
+                    }
+                    finally {
+                        cx.disconnect();
+                        pi++;
+                    }
+
+                } catch (MalformedURLException uex) {
+                    Logger.getAnonymousLogger().log(Level.ALL, "Mal formed url: " + stringUrl);
+                } catch (IOException IOEx) {
+                    Logger.getAnonymousLogger().log(Level.ALL,
+                            String.format("IO Exception connecting to %s : %S", stringUrl, IOEx.getMessage()));
+                }
+            }
+            return count;
+        }
+    }
+    private HDClickTask task =null;
+
+    public boolean ExecuteClick(KeyHitParams key_prms)
+    {
+        if (task!=null)
+            return false;
+        task = new HDClickTask() {
+            @Override
+            public void onError(int index, final String message) {
+                runOnUiThread(new Runnable() {
+                    public void run() {
+                        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+
+            @Override
+            protected void onPostExecute(Integer integer) {
+                super.onPostExecute(integer);
+                task = null;
+            }
+        };
+        task.execute(key_prms);
+
+        return true;
+    }
     /**
      * A placeholder fragment containing a simple view.
      */
@@ -98,7 +165,7 @@ public class MainTelecActivity extends ActionBarActivity {
          */
         private static final String ARG_SECTION_NUMBER = "section_number";
         public static String code_hd1 = null;
-        Map<Integer, String> keyMap = new HashMap<>();
+        public static Map<Integer, String> keyMap = new HashMap<>();
         Animation lgClickAnim;
         Animation shClickAnim;
         public PlaceholderFragment() {
@@ -170,105 +237,10 @@ public class MainTelecActivity extends ActionBarActivity {
 
             while (keys.hasNext()) {
                 Integer id=keys.next();
-
                 View v = rootView.findViewById(id);
-                v.setOnLongClickListener(
-                        new View.OnLongClickListener() {
-                            @Override
-                            public boolean onLongClick(View v) {
-                                //      v.startAnimation(lgClickAnim);
-                                KeyHitParams prms = new KeyHitParams();
-                                prms.key = keyMap.get(v.getId());
-                                prms.longclick = true;
-                                new HDClickTask() {
-                                    @Override
-                                    public void onError(int index, final String message) {
-                                        getActivity().runOnUiThread(new Runnable() {
-                                            public void run() {
-                                                Toast.makeText(getActivity().getApplicationContext(), message, Toast.LENGTH_SHORT).show();
-                                            }
-                                        });
-                                    }}.execute(prms);
-
-                                return false;
-                            }
-                        });
-
-
-                        v.setOnClickListener(
-                                new View.OnClickListener()
-                                {
-                                    @Override
-                                    public void onClick(View v) {
-                                            //         v.startAnimation( shClickAnim );
-                                            KeyHitParams prms = new KeyHitParams();
-                                            prms.key = keyMap.get(v.getId());
-
-                                        new HDClickTask() {
-                                            @Override
-                                            public void onError(int index, final String message) {
-                                                getActivity().runOnUiThread(new Runnable() {
-                                                    public void run() {
-                                                        Toast.makeText(getActivity().getApplicationContext(), message, Toast.LENGTH_SHORT).show();
-                                                    }
-                                                });
-                                            }
-                                        }.execute(prms);
-                                    }
-                                });
-                        }
-                return rootView;
-        }
-
-        private void readStream(InputStream in) {
-
-        }
-
-        private class KeyHitParams {
-            public String key;
-            public Boolean longclick=false;
-            public Integer repeat=1;
-        }
-
-        private abstract class HDClickTask extends AsyncTask<KeyHitParams,Integer,Integer> {
-
-            public abstract void onError(int index, String message);
-
-            @Override
-            protected Integer doInBackground(KeyHitParams... params) {
-                int count = params.length;
-                int pi = 0;
-                for (KeyHitParams param : params) {
-                    String stringUrl = String.format(getString(R.string.uri_hd1),
-                            code_hd1, param.key, param.longclick ? "true" : "false", param.repeat);
-                    try {
-                        URL url = new URL(stringUrl);
-                        HttpURLConnection cx = (HttpURLConnection) url.openConnection();
-                        cx.setConnectTimeout(2500);
-                        try {
-                            InputStream in = new BufferedInputStream(cx.getInputStream());
-                            readStream(in);
-                        }
-                        catch (FileNotFoundException fex)   {
-                            onError(pi, getString(R.string.e_code_hd));
-                        }
-                        catch (Exception ex) {
-                            onError(pi, ex.getMessage());
-                        }
-                        finally {
-                            cx.disconnect();
-                            pi++;
-                        }
-
-                    } catch (MalformedURLException uex) {
-                        Logger.getAnonymousLogger().log(Level.ALL, "Mal formed url: " + stringUrl);
-                    } catch (IOException IOEx) {
-                        Logger.getAnonymousLogger().log(Level.ALL,
-                                String.format("IO Exception connecting to %s : %S", stringUrl, IOEx.getMessage()));
-                    }
-                }
-                return count;
+                v.setOnTouchListener(new FreeTelecTouchListner((MainTelecActivity)this.getActivity(),code_hd1));
             }
+            return rootView;
         }
     }
 
@@ -303,9 +275,9 @@ public class MainTelecActivity extends ActionBarActivity {
                 case 0:
                     return getString(R.string.FreeTelecoidHd1).toUpperCase(l);
                 case 1:
-                    return getString(R.string.FreeTelecoidHd2).toUpperCase(l);
-                case 2:
                     return getString(R.string.FreeTelecoidFavorites).toUpperCase(l);
+                case 2:
+                    return getString(R.string.FreeTelecoidHd2).toUpperCase(l);
             }
             return null;
         }

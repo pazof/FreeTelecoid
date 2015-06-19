@@ -7,15 +7,19 @@
     </style>
     <!-- Button theme. -->
     <style name="AppThemeButton" parent="AppTheme">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">match_parent</item>
         <item name="android:textSize" >25sp</item>
         <item name="android:textColor">@color/button_text</item>
         <item name="android:colorBackground">#202020</item>
         <item name="android:layout_margin">2pt</item>
-        <item name="android:minHeight">72px</item>
-        <item name="android:minWidth">72px</item>
+        <item name="android:minHeight">72dp</item>
+        <item name="android:minWidth">72dp</item>
+        <item name="android:adjustViewBounds">true</item>
+        <item name="android:gravity">center</item>
         <item name="android:background">@drawable/button_back</item>
-        <!--<item name="android:longClickable">true</item>-->
+        <item name="android:paddingLeft">6dp</item>
+        <item name="android:paddingRight">6dp</item>
+        <item name="android:layout_weight">1</item>
     </style>
 </resources>

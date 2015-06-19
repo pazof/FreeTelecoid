@@ -18,6 +18,7 @@
             android:orientation="vertical"
             >
 
+
             <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content" android:orientation="horizontal"
@@ -96,16 +97,23 @@
                 style="@style/AppThemeButton" />
 
         </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:orientation="horizontal"
+            android:gravity="center|center_horizontal">
             <Button
                 android:id="@+id/fbt_0"
                 android:text="0"
                 style="@style/AppThemeButton" />
-
+        </LinearLayout>
             <ImageButton
                 android:id="@+id/fbt_home"
                 android:src="@drawable/home"
-                android:layout_width="fill_parent"
-                style="@style/AppThemeButton" />
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/AppThemeButton"
+                android:maxHeight="100dp"
+                android:longClickable="false" />
 
              <LinearLayout
             android:layout_width="match_parent"
@@ -170,59 +178,39 @@
                     style="@style/AppThemeButton" />
 
             </LinearLayout>
-            <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content" android:orientation="horizontal"
-            android:nestedScrollingEnabled="false"
-            android:gravity="center">
 
             <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:gravity="center"
-                android:layout_gravity="left">
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:orientation="horizontal"
+                android:gravity="center|center_horizontal">
                 <ImageButton
                     android:id="@+id/fbt_vol_inc"
                     android:src="@drawable/plus"
-                    style="@style/AppThemeButton" />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Volume" />
+                    style="@style/AppThemeButton"
+                    />
                 <ImageButton
                     android:id="@+id/fbt_vol_dec"
                     android:src="@drawable/moins"
                     style="@style/AppThemeButton" />
-
             </LinearLayout>
-            
             <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:gravity="center"
-                android:layout_gravity="right">
-                <ImageButton
-                    android:id="@+id/fbt_prgm_inc"
-                    android:src="@drawable/plus"
-                    style="@style/AppThemeButton" />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Programme"/>
-                <ImageButton
-                    android:id="@+id/fbt_prgm_dec"
-                    android:src="@drawable/moins"
-                    style="@style/AppThemeButton" />
-            </LinearLayout>
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" android:orientation="horizontal"
+                    android:gravity="center|center_horizontal">
+                        <ImageButton
+                            android:id="@+id/fbt_prgm_inc"
+                            android:src="@drawable/plus"
+                            style="@style/AppThemeButton" />
+                        <ImageButton
+                            android:id="@+id/fbt_prgm_dec"
+                            android:src="@drawable/moins"
+                            style="@style/AppThemeButton" />
             </LinearLayout>
 
 
             <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content" android:orientation="horizontal"
-                android:nestedScrollingEnabled="false"
                 android:gravity="center">
             <Button
                 android:id="@+id/fbt_mute"
