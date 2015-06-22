@@ -90,6 +90,11 @@ public class MainTelecActivity extends ActionBarActivity {
     }
     private abstract class HDClickTask extends AsyncTask<KeyHitParams,Integer,Integer> {
 
+        int timeout = 1500;
+        public HDClickTask(int connexion_timeout) {
+            timeout = connexion_timeout;
+        }
+
         public abstract void onError(int index, String message);
 
         @Override
@@ -102,7 +107,7 @@ public class MainTelecActivity extends ActionBarActivity {
                 try {
                     URL url = new URL(stringUrl);
                     HttpURLConnection cx = (HttpURLConnection) url.openConnection();
-                    cx.setConnectTimeout(500);
+                    cx.setConnectTimeout(timeout);
                     try {
                         InputStream in = new BufferedInputStream(cx.getInputStream());
                         in.read();
@@ -130,12 +135,13 @@ public class MainTelecActivity extends ActionBarActivity {
         }
     }
     private HDClickTask task =null;
-
+    int connexion_timeout = 1500;
     public boolean ExecuteClick(KeyHitParams key_prms)
     {
         if (task!=null)
-            return false;
-        task = new HDClickTask() {
+            task.cancel(true);
+
+        task = new HDClickTask(connexion_timeout) {
             @Override
             public void onError(int index, final String message) {
                 runOnUiThread(new Runnable() {
@@ -234,12 +240,29 @@ public class MainTelecActivity extends ActionBarActivity {
             Resources res = getResources();
             final SharedPreferences defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
             code_hd1 = defaultSharedPreferences.getString(res.getString(R.string.pref_code_hd1),"");
+            int specialClickTimeout = defaultSharedPreferences.getInt("specialClickTimeout",1000);
+            int autoRepeatDelay = defaultSharedPreferences.getInt("autoRepeatDelay",200);
 
-            while (keys.hasNext()) {
-                Integer id=keys.next();
-                View v = rootView.findViewById(id);
-                v.setOnTouchListener(new FreeTelecTouchListner((MainTelecActivity)this.getActivity(),code_hd1));
-            }
+            // TODO if (defaultSharedPreferences.getBoolean(res.getString(R.string.pref_V5),false))
+
+                while (keys.hasNext()) {
+                    Integer id=keys.next();
+                    View v = rootView.findViewById(id);
+                    if (id==R.id.fbt_0 ||
+                            id==R.id.fbt_1 ||
+                            id==R.id.fbt_2 ||
+                            id==R.id.fbt_3 ||
+                            id==R.id.fbt_4 ||
+                            id==R.id.fbt_5 ||
+                            id==R.id.fbt_6 ||
+                            id==R.id.fbt_7 ||
+                            id==R.id.fbt_8 ||
+                            id==R.id.fbt_9)
+                        v.setOnTouchListener(new FreeTelecLongClickTouchListner((MainTelecActivity)this.getActivity(),specialClickTimeout,autoRepeatDelay));
+                    else
+                        v.setOnTouchListener(new FreeTelecAutoRepeatTouchListener((MainTelecActivity)this.getActivity(),specialClickTimeout,autoRepeatDelay));
+                }
+
             return rootView;
         }
     }

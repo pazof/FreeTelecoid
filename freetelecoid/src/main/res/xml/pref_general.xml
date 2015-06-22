@@ -5,7 +5,16 @@
     <EditTextPreference
         android:key="@string/pref_code_hd1"
         android:title="@string/pref_title_code_hd1"
-        android:defaultValue="@string/pref_default_code_hd1" />
+        android:defaultValue=""
+        android:numeric="integer"
+        android:maxLength="10"
+        android:hint="41322886"/>
+
+    <CheckBoxPreference
+    android:key="@string/pref_V5"
+    android:title="@string/pref_title_v5"
+    android:defaultValue="false"
+    />
 
 
 </PreferenceScreen>

@@ -207,46 +207,48 @@
                 app:layout_column="2" />
 
             <!-- rows 10 11 12 -->
-            <ImageButton
+            <Button
                 android:id="@+id/fbt_vol_inc"
-                android:src="@drawable/plus"
                 android:text="Vol +"
                 style="@style/AppThemeButton"
                 app:layout_row="9"
                 app:layout_column="0"
                 />
 
-            <ImageButton
+            <Button
                 android:id="@+id/fbt_prgm_inc"
-                android:src="@drawable/plus"
                 style="@style/AppThemeButton"
                 android:text="Prog +"
                 app:layout_row="9"
                 app:layout_column="2" />
 
-            <ImageButton
+            <Button
                 android:id="@+id/fbt_vol_dec"
-                android:src="@drawable/moins"
                 style="@style/AppThemeButton"
                 android:text="Vol -"
                 app:layout_row="11"
                 app:layout_column="0" />
 
-            <ImageButton
+            <Button
                 android:id="@+id/fbt_prgm_dec"
-                android:src="@drawable/moins"
                 android:text="Prog -"
                 style="@style/AppThemeButton"
                 app:layout_row="11"
                 app:layout_column="2" />
 
             <!-- rows 13 -->
-            <Button
-                android:id="@+id/fbt_mute"
-                android:text="@string/mute"
+            <ImageButton
+                android:id="@+id/fbt_prev"
+                android:src="@drawable/prev"
                 style="@style/AppThemeButton"
                 app:layout_row="12"
-                app:layout_column="0"/>
+                app:layout_column="0"  />
+            <Button
+                android:id="@+id/fbt_bwd"
+                android:text="@string/bwd"
+                style="@style/AppThemeButton"
+                app:layout_row="12"
+                app:layout_column="1" />
             <ImageButton
                 android:id="@+id/fbt_rec"
                 android:src="@drawable/rec"
@@ -254,9 +256,9 @@
                 app:layout_row="12"
                 app:layout_column="2"/>
             <!-- rows 14 -->
-            <Button
-                android:id="@+id/fbt_bwd"
-                android:text="@string/bwd"
+            <ImageButton
+                android:id="@+id/fbt_next"
+                android:src="@drawable/next"
                 style="@style/AppThemeButton"
                 app:layout_row="13"
                 app:layout_column="0" />
@@ -267,14 +269,14 @@
                 style="@style/AppThemeButton"
                 app:layout_row="13"
                 app:layout_column="1" />
-
-
-            <ImageButton
-                android:id="@+id/fbt_prev"
-                android:src="@drawable/prev"
+            <Button
+                android:id="@+id/fbt_mute"
+                android:text="@string/mute"
                 style="@style/AppThemeButton"
                 app:layout_row="13"
-                app:layout_column="2"  />
+                app:layout_column="2"/>
+
+
             <!-- rows 15 -->
             <ImageButton
                 android:id="@+id/fbt_play"
@@ -283,34 +285,34 @@
                 app:layout_row="14"
                 app:layout_column="0"  />
 
-            <ImageButton
-                android:id="@+id/fbt_next"
-                android:src="@drawable/next"
+            <Button
+                android:id="@+id/fbt_help"
+                android:text="help"
                 style="@style/AppThemeButton"
                 app:layout_row="14"
                 app:layout_column="1" />
+
+
             <Button
                 android:id="@+id/fbt_info"
                 android:text="info"
                 style="@style/AppThemeButton"
                 app:layout_row="14"
                 app:layout_column="2" />
+
             <!-- rows 16 -->
+
             <Button
                 android:id="@+id/fbt_mail"
                 android:text="mail"
+                android:visibility="gone"
                 style="@style/AppThemeButton"
                 app:layout_row="15"
                 app:layout_column="0" />
             <Button
-                android:id="@+id/fbt_help"
-                android:text="help"
-                style="@style/AppThemeButton"
-                app:layout_row="15"
-                app:layout_column="1" />
-            <Button
                 android:id="@+id/fbt_pip"
                 android:text="pip"
+                android:visibility="gone"
                 style="@style/AppThemeButton"
                 app:layout_row="15"
                 app:layout_column="2" />
@@ -318,12 +320,14 @@
             <Button
                 android:id="@+id/fbt_epg"
                 android:text="epg"
+                android:visibility="gone"
                 style="@style/AppThemeButton"
                 app:layout_row="16"
                 app:layout_column="0" />
             <Button
                 android:id="@+id/fbt_media"
                 android:text="media"
+                android:visibility="gone"
                 style="@style/AppThemeButton"
                 app:layout_row="16"
                 app:layout_column="1"/>
@@ -332,7 +336,9 @@
                 android:text="options"
                 style="@style/AppThemeButton"
                 app:layout_row="16"
-                app:layout_column="2" />
+                app:layout_column="2"
+                android:visibility="gone"
+                />
         </android.support.v7.widget.GridLayout>
 
         </ScrollView>

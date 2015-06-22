@@ -7,7 +7,7 @@ import android.view.View;
 import static android.os.SystemClock.sleep;
 
 /**
- * Created by Paul Schneider <paul@pschneider.fr> on 18/06/15.
+ * Created by Paul Schneider <paul@pschneider.fr> on 22/06/15.
  * This file is part of fr.pschneider.lua.freetelecoid.
  * <p/>
  * fr.pschneider.lua.freetelecoid is free software: you can redistribute it and/or modify
@@ -23,17 +23,19 @@ import static android.os.SystemClock.sleep;
  * You should have received a copy of the GNU General Public License
  * along with fr.pschneider.lua.freetelecoid.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class FreeTelecTouchListner implements View.OnTouchListener {
+public class FreeTelecAutoRepeatTouchListener implements View.OnTouchListener {
+
 
     private MainTelecActivity telecActivity = null;
 
-    public FreeTelecTouchListner(MainTelecActivity a, String code_hd1) {
+    public FreeTelecAutoRepeatTouchListener(MainTelecActivity a, long timeout, long delay) {
         telecActivity = a;
+        specialClickTimeout = timeout;
+        autoRepeatDelay = delay;
     }
 
-    private final long longClickTimeout = 1000;
-    private final long delayBetweenLongAndRepeat = 1000;
-    private final long autoRepeatDelay = 200;
+    private  long specialClickTimeout = 1000;
+    private  long autoRepeatDelay = 200;
 
     class LongTouchArgs {
         public KeyHitParams params;
@@ -50,27 +52,23 @@ public class FreeTelecTouchListner implements View.OnTouchListener {
     public boolean onTouch(View v, MotionEvent event) {
         int action =  event.getAction();
         long dtime =  event.getEventTime() - event.getDownTime();
-        if (action == MotionEvent.ACTION_DOWN || action==MotionEvent.ACTION_UP || action==MotionEvent.ACTION_MOVE) {
-            KeyHitParams prms = new KeyHitParams();
-            prms.key = MainTelecActivity.PlaceholderFragment.keyMap.get(v.getId());
-            prms.repeat = 1;
-            if (action == MotionEvent.ACTION_DOWN) {
+        KeyHitParams prms = new KeyHitParams();
+        prms.key = MainTelecActivity.PlaceholderFragment.keyMap.get(v.getId());
+        prms.repeat = 1;
+        if (action == MotionEvent.ACTION_DOWN ) {
+                if (hitTask!=null)
+                    if (hitTask.cancel(true));
                 hitTask = new AsyncTask<LongTouchArgs,Void,Void>() {
                     @Override
                     protected Void doInBackground(LongTouchArgs... params) {
-                        sleep(longClickTimeout);
-                        if (params[0].view.isPressed()) {
-                            params[0].params.longclick = true;
-                            telecActivity.ExecuteClick(params[0].params);
-                            sleep(delayBetweenLongAndRepeat);
+                        sleep(specialClickTimeout);
+                        params[0].params.longclick = false;
+                        params[0].params.repeat = 1;
                             while (params[0].view.isPressed()) {
                                 // repeating
-                                sleep(autoRepeatDelay);
-                                params[0].params.longclick = false;
-                                params[0].params.repeat = 3;
                                 telecActivity.ExecuteClick(params[0].params);
+                                sleep(autoRepeatDelay);
                             }
-                        }
                         return null;
                     }
 
@@ -81,13 +79,13 @@ public class FreeTelecTouchListner implements View.OnTouchListener {
                     }
                 };
                 hitTask.execute(new LongTouchArgs(v, prms));
-            } else
-            if (action == MotionEvent.ACTION_UP) {
+            }
+        else
+         if (action == MotionEvent.ACTION_UP) {
                 if (hitTask!=null)
                     hitTask.cancel(true);
                 telecActivity.ExecuteClick(prms);
             }
-        }
         return false;
     }
 }
