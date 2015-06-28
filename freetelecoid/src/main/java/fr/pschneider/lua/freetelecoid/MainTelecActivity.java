@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
@@ -63,6 +64,9 @@ public class MainTelecActivity extends ActionBarActivity {
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(mSectionsPagerAdapter);
+        final SharedPreferences defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        Resources res = getResources();
+        // connexion_timeout = res.getInteger(R.integer.connexion_timeout);
     }
 
     @Override
@@ -88,79 +92,63 @@ public class MainTelecActivity extends ActionBarActivity {
 
         return super.onOptionsItemSelected(item);
     }
-    private abstract class HDClickTask extends AsyncTask<KeyHitParams,Integer,Integer> {
 
-        int timeout = 1500;
-        public HDClickTask(int connexion_timeout) {
-            timeout = connexion_timeout;
-        }
 
-        public abstract void onError(int index, String message);
+    public void ExecuteClick(final KeyHitParams key_prms) {
+        final AsyncTask<KeyHitParams, Integer, Integer> keyHitParamsIntegerIntegerAsyncTask = new AsyncTask<KeyHitParams, Integer, Integer>() {
+            // TODO remove "get" calls
+            private int connection_timeout = 1000;
+            private String uri = getString(R.string.uri_hd1);
 
-        @Override
-        protected Integer doInBackground(KeyHitParams... params) {
-            int count = params.length;
-            int pi = 0;
-            for (KeyHitParams param : params) {
-                String stringUrl = String.format(getString(R.string.uri_hd1),
-                        PlaceholderFragment.code_hd1, param.key, param.longclick ? "true" : "false", param.repeat);
-                try {
-                    URL url = new URL(stringUrl);
-                    HttpURLConnection cx = (HttpURLConnection) url.openConnection();
-                    cx.setConnectTimeout(timeout);
+            @Override
+            protected Integer doInBackground(KeyHitParams... params) {
+                int count = params.length;
+                int pi = 0;
+                for (KeyHitParams param : params) {
+                    String stringUrl = String.format(uri,
+                            PlaceholderFragment.code_hd1,
+                            param.key,
+                            param.longclick ? "true" : "false",
+                            param.repeat);
                     try {
-                        InputStream in = new BufferedInputStream(cx.getInputStream());
-                        in.read();
-                        in.close();
-                    }
-                    catch (FileNotFoundException fex)   {
-                        onError(pi, getString(R.string.e_code_hd));
-                    }
-                    catch (Exception ex) {
-                        onError(pi, ex.getMessage());
-                    }
-                    finally {
-                        cx.disconnect();
-                        pi++;
-                    }
+                        URL url = new URL(stringUrl);
+                        HttpURLConnection cx = (HttpURLConnection) url.openConnection();
+                        cx.setConnectTimeout(connection_timeout);
+                        try {
+                            InputStream in = new BufferedInputStream(cx.getInputStream());
+                            // TODO use in.read();
+                            in.close();
+                        } catch (FileNotFoundException fex) {
+                            onError(pi, getString(R.string.e_code_hd));
+                        } catch (Exception ex) {
+                            onError(pi, ex.getMessage());
+                        } finally {
+                            cx.disconnect();
+                            pi++;
+                        }
 
-                } catch (MalformedURLException uex) {
-                    Logger.getAnonymousLogger().log(Level.ALL, "Mal formed url: " + stringUrl);
-                } catch (IOException IOEx) {
-                    Logger.getAnonymousLogger().log(Level.ALL,
-                            String.format("IO Exception connecting to %s : %S", stringUrl, IOEx.getMessage()));
+                    } catch (MalformedURLException uex) {
+                        Logger.getAnonymousLogger().log(Level.ALL, "Mal formed url: " + stringUrl);
+                    } catch (IOException IOEx) {
+                        Logger.getAnonymousLogger().log(Level.ALL,
+                                String.format("IO Exception connecting to %s : %S", stringUrl, IOEx.getMessage()));
+                    }
                 }
+                return null;
             }
-            return count;
-        }
-    }
-    private HDClickTask task =null;
-    int connexion_timeout = 1500;
-    public boolean ExecuteClick(KeyHitParams key_prms)
-    {
-        if (task!=null)
-            task.cancel(true);
 
-        task = new HDClickTask(connexion_timeout) {
-            @Override
             public void onError(int index, final String message) {
-                runOnUiThread(new Runnable() {
-                    public void run() {
-                        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
-                    }
-                });
-            }
-
-            @Override
-            protected void onPostExecute(Integer integer) {
-                super.onPostExecute(integer);
-                task = null;
+                Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
             }
         };
-        task.execute(key_prms);
 
-        return true;
+        if (Build.VERSION.SDK_INT>=Build.VERSION_CODES.HONEYCOMB)
+            keyHitParamsIntegerIntegerAsyncTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, key_prms);
+        else
+            keyHitParamsIntegerIntegerAsyncTask.execute(key_prms);
     }
+
+
     /**
      * A placeholder fragment containing a simple view.
      */
@@ -174,6 +162,7 @@ public class MainTelecActivity extends ActionBarActivity {
         public static Map<Integer, String> keyMap = new HashMap<>();
         Animation lgClickAnim;
         Animation shClickAnim;
+
         public PlaceholderFragment() {
         }
 
@@ -227,7 +216,7 @@ public class MainTelecActivity extends ActionBarActivity {
             keyMap.put(R.id.fbt_ok, "ok");
             keyMap.put(R.id.fbt_options, "options");
             keyMap.put(R.id.fbt_pip, "pip");
-            keyMap.put(R.id.fbt_vol_inc,"vol_inc");
+            keyMap.put(R.id.fbt_vol_inc, "vol_inc");
             keyMap.put(R.id.fbt_vol_dec, "vol_dec");
             keyMap.put(R.id.fbt_prgm_dec, "prgm_dec");
             keyMap.put(R.id.fbt_prgm_inc, "prgm_inc");
@@ -239,29 +228,33 @@ public class MainTelecActivity extends ActionBarActivity {
 
             Resources res = getResources();
             final SharedPreferences defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
-            code_hd1 = defaultSharedPreferences.getString(res.getString(R.string.pref_code_hd1),"");
-            int specialClickTimeout = defaultSharedPreferences.getInt("specialClickTimeout",1000);
-            int autoRepeatDelay = defaultSharedPreferences.getInt("autoRepeatDelay",200);
-
+            code_hd1 = defaultSharedPreferences.getString(res.getString(R.string.pref_code_hd1), "");
+            int autoRepeatTimeout = res.getInteger(R.integer.autoRepeatDelay);
+            int longClickTimeout = res.getInteger(R.integer.longClickTimeout);
+            int autoRepeatDelay = res.getInteger(R.integer.autoRepeatDelay);
             // TODO if (defaultSharedPreferences.getBoolean(res.getString(R.string.pref_V5),false))
 
-                while (keys.hasNext()) {
-                    Integer id=keys.next();
-                    View v = rootView.findViewById(id);
-                    if (id==R.id.fbt_0 ||
-                            id==R.id.fbt_1 ||
-                            id==R.id.fbt_2 ||
-                            id==R.id.fbt_3 ||
-                            id==R.id.fbt_4 ||
-                            id==R.id.fbt_5 ||
-                            id==R.id.fbt_6 ||
-                            id==R.id.fbt_7 ||
-                            id==R.id.fbt_8 ||
-                            id==R.id.fbt_9)
-                        v.setOnTouchListener(new FreeTelecLongClickTouchListner((MainTelecActivity)this.getActivity(),specialClickTimeout,autoRepeatDelay));
-                    else
-                        v.setOnTouchListener(new FreeTelecAutoRepeatTouchListener((MainTelecActivity)this.getActivity(),specialClickTimeout,autoRepeatDelay));
+            while (keys.hasNext()) {
+                Integer id = keys.next();
+                View v = rootView.findViewById(id);
+                View.OnTouchListener l;
+
+                switch (id) {
+                    case R.id.fbt_vol_dec:
+                    case R.id.fbt_vol_inc:
+                    case R.id.fbt_prgm_dec:
+                    case R.id.fbt_prgm_inc:
+                    case R.id.fbt_left:
+                    case R.id.fbt_right:
+                    case R.id.fbt_up:
+                    case R.id.fbt_down:
+                        l = new FreeTelecAutoRepeatTouchListener((MainTelecActivity) this.getActivity(), autoRepeatTimeout, autoRepeatDelay);
+                        break;
+                    default:
+                        l = new FreeTelecLongClickTouchListner((MainTelecActivity) this.getActivity(), longClickTimeout);
                 }
+                v.setOnTouchListener(l);
+            }
 
             return rootView;
         }

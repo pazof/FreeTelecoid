@@ -27,14 +27,12 @@ public class FreeTelecLongClickTouchListner implements View.OnTouchListener {
 
     private MainTelecActivity telecActivity = null;
 
-    public FreeTelecLongClickTouchListner(MainTelecActivity a,  long timeout, long delay) {
+    public FreeTelecLongClickTouchListner(MainTelecActivity a,  long timeout) {
         telecActivity = a;
         specialClickTimeout = timeout;
-        autoRepeatDelay = delay;
     }
 
-    private long specialClickTimeout = R.integer.specialClickTimeout;
-    private long autoRepeatDelay = 200;
+    private long specialClickTimeout = R.integer.longClickTimeout;
 
     class LongTouchArgs {
         public KeyHitParams params;
@@ -57,7 +55,6 @@ public class FreeTelecLongClickTouchListner implements View.OnTouchListener {
             prms.repeat = 1;
             if (action == MotionEvent.ACTION_DOWN) {
                 hitTask = new AsyncTask<LongTouchArgs,Void,Void>() {
-
                     @Override
                     protected Void doInBackground(LongTouchArgs... params) {
                         sleep(specialClickTimeout);

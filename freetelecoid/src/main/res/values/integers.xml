@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <integer name="connexion_timeout">1000</integer>
-    <integer name="specialClickTimeout">450</integer>
-    <integer name="autoRepeatDelay">140</integer>
+    <integer name="connexion_timeout">1500</integer>
+    <integer name="longClickTimeout">1000</integer>
+    <integer name="autoRepeatTimeout">400</integer>
+    <integer name="autoRepeatDelay">250</integer>
 </resources>

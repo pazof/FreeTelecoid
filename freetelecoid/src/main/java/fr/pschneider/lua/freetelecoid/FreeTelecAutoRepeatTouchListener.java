@@ -30,12 +30,12 @@ public class FreeTelecAutoRepeatTouchListener implements View.OnTouchListener {
 
     public FreeTelecAutoRepeatTouchListener(MainTelecActivity a, long timeout, long delay) {
         telecActivity = a;
-        specialClickTimeout = timeout;
+        autoReapeatTimeout = timeout;
         autoRepeatDelay = delay;
     }
 
-    private  long specialClickTimeout = 1000;
-    private  long autoRepeatDelay = 200;
+    private  long autoReapeatTimeout;
+    private  long autoRepeatDelay ;
 
     class LongTouchArgs {
         public KeyHitParams params;
@@ -51,19 +51,18 @@ public class FreeTelecAutoRepeatTouchListener implements View.OnTouchListener {
     @Override
     public boolean onTouch(View v, MotionEvent event) {
         int action =  event.getAction();
-        long dtime =  event.getEventTime() - event.getDownTime();
         KeyHitParams prms = new KeyHitParams();
         prms.key = MainTelecActivity.PlaceholderFragment.keyMap.get(v.getId());
         prms.repeat = 1;
+        prms.longclick = false;
         if (action == MotionEvent.ACTION_DOWN ) {
                 if (hitTask!=null)
                     if (hitTask.cancel(true));
                 hitTask = new AsyncTask<LongTouchArgs,Void,Void>() {
                     @Override
                     protected Void doInBackground(LongTouchArgs... params) {
-                        sleep(specialClickTimeout);
-                        params[0].params.longclick = false;
-                        params[0].params.repeat = 1;
+                        telecActivity.ExecuteClick(params[0].params);
+                        sleep(autoReapeatTimeout);
                             while (params[0].view.isPressed()) {
                                 // repeating
                                 telecActivity.ExecuteClick(params[0].params);
@@ -84,7 +83,6 @@ public class FreeTelecAutoRepeatTouchListener implements View.OnTouchListener {
          if (action == MotionEvent.ACTION_UP) {
                 if (hitTask!=null)
                     hitTask.cancel(true);
-                telecActivity.ExecuteClick(prms);
             }
         return false;
     }
