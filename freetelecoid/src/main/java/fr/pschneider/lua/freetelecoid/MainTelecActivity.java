@@ -138,7 +138,13 @@ public class MainTelecActivity extends ActionBarActivity {
             }
 
             public void onError(int index, final String message) {
-                Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+                    }
+                });
+
             }
         };
 
